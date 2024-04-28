@@ -1,37 +1,22 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-  ParseUUIDPipe,
-  UseGuards,
-} from '@nestjs/common';
-import { UsersService } from './users.service';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
-import {
-  ApiBearerAuth,
-  ApiForbiddenResponse,
-  ApiResponse,
-  ApiTags,
-} from '@nestjs/swagger';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, ParseUUIDPipe } from '@nestjs/common';
+import { CategoriesService } from './categories.service';
+import { CreateCategoryDto } from './dto/create-category.dto';
+import { UpdateCategoryDto } from './dto/update-category.dto';
+import { ApiBearerAuth, ApiForbiddenResponse, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
-@ApiTags('Users')
-@Controller('users')
-export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+@ApiTags('Category')
+@Controller('categories')
+export class CategoriesController {
+  constructor(private readonly categoriesService: CategoriesService) {}
 
   @ApiResponse({ status: 400, description: 'Usuario já existir' })
   @ApiForbiddenResponse({ status: 401, description: 'Acesso negado.' })
   @ApiBearerAuth()
   @Post()
   @UseGuards(JwtAuthGuard)
-  create(@Body() createUserDto: CreateUserDto) {
-    return this.usersService.create(createUserDto);
+  create(@Body() createCategoryDto: CreateCategoryDto) {
+    return this.categoriesService.create(createCategoryDto);
   }
 
   @ApiForbiddenResponse({ status: 401, description: 'Acesso negado.' })
@@ -39,7 +24,7 @@ export class UsersController {
   @Get()
   @UseGuards(JwtAuthGuard)
   findAll() {
-    return this.usersService.findAll();
+    return this.categoriesService.findAll();
   }
 
   @ApiForbiddenResponse({ status: 401, description: 'Acesso negado.' })
@@ -47,7 +32,7 @@ export class UsersController {
   @Get(':id')
   @UseGuards(JwtAuthGuard)
   findOne(@Param('id', new ParseUUIDPipe()) id: string) {
-    return this.usersService.findOne(id);
+    return this.categoriesService.findOne(id);
   }
 
   @ApiForbiddenResponse({ status: 401, description: 'Acesso negado.' })
@@ -56,9 +41,9 @@ export class UsersController {
   @UseGuards(JwtAuthGuard)
   update(
     @Param('id', new ParseUUIDPipe()) id: string,
-    @Body() updateUserDto: UpdateUserDto,
+    @Body() updateUserDto: UpdateCategoryDto,
   ) {
-    return this.usersService.update(id, updateUserDto);
+    return this.categoriesService.update(id, updateUserDto);
   }
 
   @ApiForbiddenResponse({ status: 401, description: 'Acesso negado.' })
@@ -66,6 +51,6 @@ export class UsersController {
   @Delete(':id')
   @UseGuards(JwtAuthGuard)
   remove(@Param('id', new ParseUUIDPipe()) id: string) {
-    return this.usersService.remove(id);
+    return this.categoriesService.remove(id);
   }
 }
