@@ -26,7 +26,10 @@ export class UsersService {
       password: hashedPassword,
     };
 
-    return await this.prisma.user.create({ data: newUser });
+    const createdUser = await this.prisma.user.create({ data: newUser });
+
+    const { password, ...result } = createdUser;
+    return result;
   }
 
   async findAll() {
@@ -54,10 +57,18 @@ export class UsersService {
     if (!user) {
       throw new NotFoundException('Usuário não encontrado');
     }
-    return await this.prisma.user.update({
+
+    const updatedUser = await this.prisma.user.update({
       where: { id },
-      data: updateUserDto,
+      data: {
+        ...(updateUserDto.name !== undefined && { name: updateUserDto.name }),
+        ...(updateUserDto.email !== undefined && {
+          email: updateUserDto.email,
+        }),
+      },
     });
+
+    return updatedUser;
   }
 
   async remove(id: string) {

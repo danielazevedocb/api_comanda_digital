@@ -30,14 +30,13 @@ model Category {
 
 model Product {
   id          String    @id @default(uuid())
-  name        String
-  price       String
+  name        String    @unique
+  price       Float
   description String
-  banner      String
+  banner      String    @unique
   created_at  DateTime? @default(now())
   updated_at  DateTime? @default(now())
-
-  category    Category @relation(fields: [category_id], references: [id])
+  category    Category  @relation(fields: [category_id], references: [id])
   category_id String
   items       Item[]
 
@@ -45,12 +44,11 @@ model Product {
 }
 
 model Order {
-  id     String  @id @default(uuid())
-  table  Int     @unique
-  status Boolean @default(false)
-  draft  Boolean @default(true)
-  name   String?
-
+  id         String    @id @default(uuid())
+  table      Int       @unique
+  status     Boolean   @default(false)
+  draft      Boolean   @default(true)
+  name       String?
   created_at DateTime? @default(now())
   updated_at DateTime? @default(now())
   items      Item[]
@@ -59,14 +57,12 @@ model Order {
 }
 
 model Item {
-  id     String @id @default(uuid())
-  amount Int
-
+  id         String    @id @default(uuid())
+  amount     Int
   created_at DateTime? @default(now())
   updated_at DateTime? @default(now())
-
-  order      Order   @relation(fields: [order_id], references: [id])
-  product    Product @relation(fields: [product_id], references: [id])
+  order      Order     @relation(fields: [order_id], references: [id])
+  product    Product   @relation(fields: [product_id], references: [id])
   order_id   String
   product_id String
 

@@ -1,11 +1,14 @@
-import { Injectable, NotFoundException, ConflictException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  ConflictException,
+} from '@nestjs/common';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
 import { PrismaService } from 'src/database/database.service';
 
 @Injectable()
 export class CategoriesService {
-  
   constructor(private readonly prisma: PrismaService) {}
 
   async create(createCategoryDto: CreateCategoryDto) {
@@ -23,7 +26,10 @@ export class CategoriesService {
   }
 
   async findOne(id: string) {
-    const category = await this.prisma.category.findUnique({ where: { id }, select: { id: true, name: true } });
+    const category = await this.prisma.category.findUnique({
+      where: { id },
+      select: { id: true, name: true },
+    });
     if (!category) {
       throw new NotFoundException('Categoria não encontrada.');
     }
@@ -33,7 +39,9 @@ export class CategoriesService {
   async update(id: string, UpdateCategoryDto: UpdateCategoryDto) {
     const category = await this.prisma.category.findUnique({
       where: { id },
-      select: { id: true, name: true },
+      select: {
+        name: true,
+      },
     });
     if (!category) {
       throw new NotFoundException('Usuário não encontrado');
