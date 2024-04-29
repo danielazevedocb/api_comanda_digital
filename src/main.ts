@@ -3,7 +3,7 @@ import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import * as express from 'express';
-import * as swaggerUI from 'swagger-ui-dist';
+import * as path from 'path';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -25,13 +25,9 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('docs', app, document);
 
-  // Carregar recursos do Swagger UI via CDN
-  const swaggerIndex = swaggerUI.getAbsoluteFSPath();
-  app.use('/swagger', express.static(swaggerIndex));
-  app.use('/swagger', express.static(swaggerUI.getAbsoluteFSPath('index.html')));
-  app.use('/swagger', express.static(swaggerUI.getAbsoluteFSPath('swagger-ui.css')));
-  app.use('/swagger', express.static(swaggerUI.getAbsoluteFSPath('swagger-ui-bundle.js')));
-  app.use('/swagger', express.static(swaggerUI.getAbsoluteFSPath('swagger-ui-standalone-preset.js')));
+  // Servir arquivos do Swagger UI
+  const swaggerDistPath = path.join(__dirname, '..', 'node_modules', 'swagger-ui-dist');
+  app.use('/swagger', express.static(swaggerDistPath));
 
   await app.listen(3000);
 }
