@@ -12,14 +12,16 @@ async function bootstrap() {
     .setDescription('API de autenticação')
     .setVersion('1.0')
     .addTag('tag')
-
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('docs', app, document, {});
 
-  // Escuta na porta disponível pelo ambiente
-  await app.listen(3000);
+  // Use a porta fornecida pelo ambiente ou padrão para 3000
+  const port = process.env.PORT || 3000;
+
+  // Escuta na porta fornecida pelo ambiente
+  await app.listen(port);
 }
 
 bootstrap();
