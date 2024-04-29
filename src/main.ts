@@ -2,15 +2,13 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import * as express from 'express';
-import * as path from 'path';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.useGlobalPipes(new ValidationPipe());
-  
+
   const config = new DocumentBuilder()
-    .setTitle('Comanda digital - API')
+    .setTitle('Comanda Digital - API')
     .setDescription('API de autenticação')
     .setVersion('1.0')
     .addBearerAuth(
@@ -22,13 +20,16 @@ async function bootstrap() {
       'JWT',
     )
     .build();
+
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('/docs', app, document);
+  // Configura o Swagger UI usando o mesmo endpoint para documentação e arquivos estáticos
+  SwaggerModule.setup('docs', app, document, {
+    customCssUrl: 'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.1.3/swagger-ui.css',
+    customJs: 'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.1.3/swagger-ui-bundle.js'
+  });
 
-  // Servir arquivos do Swagger UI
-  const swaggerDistPath = path.join(__dirname, '..', 'node_modules', 'swagger-ui-dist');
-  app.use('/swagger', express.static(swaggerDistPath));
-
-  await app.listen(3000);
+  // Escuta na porta disponível pelo ambiente
+  await app.listen(process.env.PORT || 3000);
 }
+
 bootstrap();
