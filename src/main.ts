@@ -21,15 +21,14 @@ async function bootstrap() {
     )
     .build();
 
-  const document = SwaggerModule.createDocument(app, config);
-  // Configura o Swagger UI usando o mesmo endpoint para documentação e arquivos estáticos
-  SwaggerModule.setup('docs', app, document, {
-    customCssUrl: 'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.1.3/swagger-ui.css',
-    customJs: 'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.1.3/swagger-ui-bundle.js'
-  });
+    const document = SwaggerModule.createDocument(app, config);
+    SwaggerModule.setup('docs', app, document, {
+      customCssUrl: 'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.1.3/swagger-ui.css',
+      customJs: 'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.1.3/swagger-ui-bundle.js'
+    });
 
   // Escuta na porta disponível pelo ambiente
-  await app.listen(process.env.PORT || 3000);
+  await app.listen(3000);
 }
 
 bootstrap();
