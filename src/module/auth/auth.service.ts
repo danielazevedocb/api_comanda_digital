@@ -1,7 +1,7 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { compare } from 'bcrypt';
-import { PrismaService } from 'src/database/database.service'; // Caminho para o serviço do Prisma
+import { PrismaService } from 'src/database/prisma.service'; // Caminho para o serviço do Prisma
 
 @Injectable()
 export class AuthService {
